@@ -3,10 +3,14 @@ package com.example.questm5i3;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.questm5i3.databinding.FragmentTriviaBinding;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,6 +18,8 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class FragmentTrivia extends Fragment {
+
+    private FragmentTriviaBinding binding;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -50,7 +56,7 @@ public class FragmentTrivia extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam1 = getArguments().getString("nombre");
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -58,7 +64,29 @@ public class FragmentTrivia extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        binding = FragmentTriviaBinding.inflate(getLayoutInflater(), container, false);
+
+        binding.textViewName.setText("Hola, " + mParam1);
+        binding.btnEnviar.setOnClickListener(view -> {
+
+
+            boolean correcto = false;
+            Bundle bundle = new Bundle();
+            if(binding.radioGroupPokemon.getCheckedRadioButtonId() == binding.radioButton.getId()){
+                correcto = true;
+            }
+
+
+            bundle.putString("nombre",mParam1);
+            bundle.putBoolean("respuesta",correcto);
+            Navigation.findNavController(getView()).navigate(R.id.action_fragmentTrivia2_to_fragmentRespuesta2, bundle);
+
+
+        });
+
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_trivia, container, false);
+        return binding.getRoot();
     }
 }

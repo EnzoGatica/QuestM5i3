@@ -3,10 +3,15 @@ package com.example.questm5i3;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.questm5i3.databinding.FragmentRespuestaBinding;
+import com.example.questm5i3.databinding.FragmentTriviaBinding;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,6 +19,8 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class FragmentRespuesta extends Fragment {
+
+    private FragmentRespuestaBinding binding;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -46,19 +53,38 @@ public class FragmentRespuesta extends Fragment {
         return fragment;
     }
 
+    private boolean resultadoCorrect = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam1 = getArguments().getString("nombre");
             mParam2 = getArguments().getString(ARG_PARAM2);
+            resultadoCorrect = getArguments().getBoolean("respuesta");
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_respuesta, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        binding = FragmentRespuestaBinding.inflate(getLayoutInflater(), container, false);
+
+        if(resultadoCorrect == true){
+            binding.textViewRespuesta.setText("Respuesta Correcta");
+        }else {
+            binding.textViewRespuesta.setText("Respuesta Incorrecta");
+        }
+
+        binding.btnIntento.setOnClickListener(view -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("nombre",mParam1);
+            Navigation.findNavController(getView()).navigate(R.id.action_fragmentRespuesta2_to_fragmentTrivia2, bundle);
+
+        });
+
+
+
+       return binding.getRoot();
     }
 }
